@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 // constants
 #define DIM_MIN 3
@@ -41,8 +42,8 @@ void clear(void);
 void greet(void);
 void init(void);
 void draw(void);
-int move(int tile);
-int won(void);
+bool move(int tile);
+bool won(void);
 
 int main(int argc, char* argv[])
 {
@@ -165,7 +166,25 @@ void greet(void)
  */
 void init(void)
 {
-  // TODO
+  // Get Total number of spaces
+  int total = d * d;
+
+  // Add tiles to board
+  for (int i = 0; i < d; i++)
+  {
+	for (int j = 0; j < d; j++)
+	{
+	  // Decrement value by one and assign to array
+	  board[i][j] = --total;
+	}
+  }
+
+  // Swap 2 and 1 if even number of spaces
+  if ((d * d) % 2 == 0)
+  {
+	board[d - 1][d - 3] = 1;
+	board[d - 1][d - 2] = 2;
+  }
 }
 
 /**
@@ -173,23 +192,102 @@ void init(void)
  */
 void draw(void)
 {
-  // TODO
+  // Loop through board array
+  for (int i = 0; i < d; i++)
+  {
+	for (int j = 0; j < d; j++)
+	{
+	  // Print line instead of zero
+	  if (board[i][j] == 0)
+	  {
+		printf("  _");
+	  }
+	  else
+	  {
+		printf("%3i", board[i][j]);
+	  }
+	}
+
+	printf("\n\n");
+  }
 }
 
 /**
  * If tile borders empty space, moves tile and returns true, else
  * returns false.
  */
-int move(int tile)
+bool move(int tile)
 {
-  // TODO
-}
+  // Check if valid tile
+  if (tile > d * d - 1 || tile < 1)
+  {
+	return false;
+  }
 
+  // Search board for row, and column
+  int row = 0, column = 0;
+
+  for (int i = 0; i < d; i++)
+  {
+	for (int j = 0; j < d; j++)
+	{
+	  if (board[i][j] == tile)
+	  {
+		row = i;
+		column = j;
+	  }
+	}
+  }
+
+  // Check nearby spaces
+  if (row - 1 >= 0 && board[row - 1][column] == 0)
+  {
+	board[row - 1][column] = board[row][column];
+	board[row][column] = 0;
+	return true;
+  }
+  else if (row + 1 < d && board[row + 1][column] == 0)
+  {
+	board[row + 1][column] = board[row][column];
+	board[row][column] = 0;
+	return true;
+  }
+  else if (column - 1 >= 0 && board[row][column - 1] == 0)
+  {
+	board[row][column - 1] = board[row][column];
+	board[row][column] = 0;
+	return true;
+  }
+  else if (column + 1 < d && board[row][column + 1] == 0)
+  {
+	board[row][column + 1] = board[row][column];
+	board[row][column] = 0;
+	return true;
+  }
+
+  return false;
+}
 /**
  * Returns true if game is won (i.e., board is in winning configuration),
  * else false.
  */
-int won(void)
+bool won(void)
 {
-  // WON
+  // Set counter
+  int counter = 0;
+
+  // Check each tile to ensure it's in order
+  for (int i = 0; i < d; i++)
+  {
+	for (int j = 0; j < d; j++)
+	{
+	  // Check if last spot and if not correct value
+	  if (++counter != (d * d) && board[i][j] != counter)
+	  {
+		return false;
+	  }
+	}
+  }
+
+  return true;
 }
