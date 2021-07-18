@@ -21,7 +21,7 @@
  * Note that usleep is obsolete, but it offers more granularity than
  * sleep and is simpler to use than nanosleep; `man usleep` for more.
  */
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
         int tile;
 		scanf("%d", &tile);
 		getchar();
-        
+
         // quit if user inputs 0 (for testing)
         if (tile == 0)
         {
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
         // sleep thread for animation's sake
         usleep(50000);
     }
-    
+
     // close log
     fclose(file);
 
@@ -161,7 +161,7 @@ void greet(void)
 
 /**
  * Initializes the game's board with tiles numbered 1 through d*d - 1
- * (i.e., fills 2D array with values but does not actually print them).  
+ * (i.e., fills 2D array with values but does not actually print them).
  */
 void init(void)
 {
@@ -178,7 +178,7 @@ void draw(void)
 
 /**
  * If tile borders empty space, moves tile and returns true, else
- * returns false. 
+ * returns false.
  */
 int move(int tile)
 {
@@ -186,7 +186,7 @@ int move(int tile)
 }
 
 /**
- * Returns true if game is won (i.e., board is in winning configuration), 
+ * Returns true if game is won (i.e., board is in winning configuration),
  * else false.
  */
 int won(void)
